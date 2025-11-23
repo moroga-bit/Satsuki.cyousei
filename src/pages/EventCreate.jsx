@@ -4,7 +4,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ja } from 'date-fns/locale/ja';
 import { format } from 'date-fns';
-import { saveEvent } from '../utils/storage';
+import { saveEvent } from '../utils/eventStorage';
 import './EventCreate.css';
 
 registerLocale('ja', ja);
@@ -15,6 +15,7 @@ const EventCreate = () => {
     const [memo, setMemo] = useState('');
     const [selectedDate, setSelectedDate] = useState(null);
     const [candidateDates, setCandidateDates] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleAddDate = () => {
         if (!selectedDate) return;
@@ -29,23 +30,31 @@ const EventCreate = () => {
         setCandidateDates(candidateDates.filter(date => date !== dateToRemove));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (candidateDates.length === 0) {
             alert('候補日程を少なくとも1つ追加してください。');
             return;
         }
 
-        const id = Math.random().toString(36).substr(2, 9);
-        const newEvent = {
-            id,
-            title: eventName,
-            memo,
-            candidates: candidateDates,
-            participants: []
-        };
-        saveEvent(newEvent);
-        navigate(`/event/${id}`);
+        setIsSubmitting(true);
+        try {
+            const id = Math.random().toString(36).substr(2, 9);
+            const newEvent = {
+                id,
+                title: eventName,
+                memo,
+                candidates: candidateDates,
+                attendance: []
+            };
+
+            await saveEvent(id, newEvent);
+            navigate(`/event/${id}`);
+        } catch (error) {
+            console.error('イベント作成エラー:', error);
+            alert('イベントの作成に失敗しました。もう一度お試しください。');
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -117,7 +126,9 @@ const EventCreate = () => {
                     </div>
                 )}
 
-                <button type="submit" className="submit-button">イベントを作成</button>
+                <button type="submit" className="submit-button" disabled={isSubmitting}>
+                    {isSubmitting ? '作成中...' : 'イベントを作成'}
+                </button>
             </form>
         </div>
     );

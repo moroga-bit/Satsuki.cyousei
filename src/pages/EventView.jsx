@@ -1,23 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getEventById, updateEvent } from '../utils/storage';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../firebase';
+import { updateAttendance } from '../utils/eventStorage';
 import Toast from '../components/Toast';
 import './EventView.css';
 
 const EventView = () => {
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [newName, setNewName] = useState('');
     const [newStatuses, setNewStatuses] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [toastMessage, setToastMessage] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        const loadedEvent = getEventById(eventId);
-        if (loadedEvent) {
-            setEvent(loadedEvent);
-            setNewStatuses(Array(loadedEvent.candidates.length).fill('o'));
-        }
+        const eventRef = ref(database, `events/${eventId}`);
+
+        const unsubscribe = onValue(eventRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const eventData = snapshot.val();
+                setEvent(eventData);
+                setNewStatuses(Array(eventData.candidates.length).fill('o'));
+                setLoading(false);
+            } else {
+                setEvent(null);
+                setLoading(false);
+            }
+        }, (error) => {
+            console.error('データ取得エラー:', error);
+            setLoading(false);
+        });
+
+        return () => unsubscribe();
     }, [eventId]);
 
     const handleStatusChange = (index, value) => {
@@ -26,28 +43,33 @@ const EventView = () => {
         setNewStatuses(updated);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!event) return;
+        if (!event || !newName.trim()) {
+            setToastMessage('お名前を入力してください');
+            return;
+        }
 
-        const newParticipant = {
-            name: newName,
-            statuses: newStatuses,
-            comment: newComment
-        };
+        setIsSubmitting(true);
+        try {
+            const newAttendance = {
+                name: newName.trim(),
+                statuses: newStatuses,
+                comment: newComment.trim()
+            };
 
-        const updatedEvent = {
-            ...event,
-            participants: [...event.participants, newParticipant]
-        };
+            await updateAttendance(eventId, newAttendance);
 
-        updateEvent(updatedEvent);
-        setEvent(updatedEvent);
-
-        setNewName('');
-        setNewStatuses(Array(event.candidates.length).fill('o'));
-        setNewComment('');
-        setToastMessage('出欠を登録しました！');
+            setNewName('');
+            setNewStatuses(Array(event.candidates.length).fill('o'));
+            setNewComment('');
+            setToastMessage('出欠を登録しました！');
+        } catch (error) {
+            console.error('出欠登録エラー:', error);
+            setToastMessage('出欠の登録に失敗しました');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleCopyUrl = () => {
@@ -69,9 +91,28 @@ const EventView = () => {
         }
     };
 
-    if (!event) {
-        return <div className="event-view-container">読み込み中、またはイベントが見つかりません...</div>;
+    if (loading) {
+        return (
+            <div className="event-view-container">
+                <div className="event-header">
+                    <h2 className="event-title">読み込み中...</h2>
+                </div>
+            </div>
+        );
     }
+
+    if (!event) {
+        return (
+            <div className="event-view-container">
+                <div className="event-header">
+                    <h2 className="event-title">イベントが見つかりません</h2>
+                    <p className="event-memo">このイベントは存在しないか、削除された可能性があります。</p>
+                </div>
+            </div>
+        );
+    }
+
+    const attendance = event.attendance || [];
 
     return (
         <div className="event-view-container">
@@ -106,7 +147,7 @@ const EventView = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {event.participants.map((p, i) => (
+                            {attendance.map((p, i) => (
                                 <tr key={i}>
                                     <td>{p.name}</td>
                                     {p.statuses.map((s, j) => (
@@ -194,7 +235,9 @@ const EventView = () => {
                             />
                         </div>
 
-                        <button type="submit" className="submit-button">出欠を登録する</button>
+                        <button type="submit" className="submit-button" disabled={isSubmitting}>
+                            {isSubmitting ? '登録中...' : '出欠を登録する'}
+                        </button>
                     </form>
                 </div>
             </div>
