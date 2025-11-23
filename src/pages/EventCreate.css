@@ -105,7 +105,6 @@
     box-shadow: 0 5px 10px rgba(0, 36, 93, 0.3);
 }
 
-/* Preview Styles */
 .candidates-preview {
     display: flex;
     flex-wrap: wrap;
@@ -141,10 +140,12 @@
     display: flex;
     gap: var(--spacing-md);
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .date-input {
-    width: 220px !important;
+    min-width: 220px;
+    flex: 1;
 }
 
 .add-date-button {
@@ -187,9 +188,8 @@
     background-color: #ff5252;
 }
 
-/* Override react-datepicker styles to match theme */
 .react-datepicker-wrapper {
-    width: auto;
+    width: 100%;
 }
 
 .react-datepicker__input-container input {
@@ -212,4 +212,49 @@
 .react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item--selected {
     background-color: var(--color-secondary) !important;
     color: white !important;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .create-event-container {
+        padding: var(--spacing-lg);
+    }
+
+    .create-event-container h2 {
+        font-size: 1.5rem;
+    }
+
+    .form-input,
+    .form-textarea {
+        font-size: 16px;
+        /* Prevents iOS zoom */
+    }
+
+    .date-picker-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .date-input {
+        width: 100%;
+    }
+
+    .add-date-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .create-event-container {
+        padding: var(--spacing-md);
+    }
+
+    .create-event-container h2 {
+        font-size: 1.3rem;
+    }
+
+    .submit-button {
+        padding: 16px;
+        font-size: 1rem;
+    }
 }
