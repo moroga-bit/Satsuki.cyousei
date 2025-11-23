@@ -1,0 +1,322 @@
+/* Clean, minimal design focused on readability */
+
+.event-view-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing-xl);
+}
+
+/* Event Header - Eye-catching design */
+.event-header {
+    background: linear-gradient(135deg, #ffffff 0%, #fff5f8 100%);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    border-left: 6px solid var(--color-secondary);
+    box-shadow: 0 4px 12px rgba(246, 173, 198, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.event-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(246, 173, 198, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(50%, -50%);
+}
+
+.event-title {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, #003d8f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 var(--spacing-lg) 0;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+}
+
+.event-memo {
+    background: white;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    white-space: pre-wrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(246, 173, 198, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+/* Share Button - Simple and clear */
+.share-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--spacing-lg);
+}
+
+.share-button {
+    background: white;
+    border: 1px solid #ddd;
+    color: var(--color-text);
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all 0.2s;
+}
+
+.share-button:hover {
+    background: #f8f9fa;
+    border-color: var(--color-secondary);
+}
+
+/* Attendance Section */
+.attendance-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.attendance-section h3 {
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Clean table design */
+.attendance-table-wrapper {
+    background: white;
+    border-radius: var(--radius-md);
+    overflow-x: auto;
+    margin-bottom: var(--spacing-xl);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+.attendance-table th {
+    background: #f8f9fa;
+    color: var(--color-text);
+    font-weight: 700;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.attendance-table th:first-child {
+    border-top-left-radius: var(--radius-md);
+}
+
+.attendance-table th:last-child {
+    border-top-right-radius: var(--radius-md);
+}
+
+.attendance-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+.attendance-table tr:hover {
+    background-color: #fafafa;
+}
+
+.attendance-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Status symbols - simple and clear */
+.status-symbol {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.status-o {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-tri {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.status-x {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* Input Form - Clean and approachable */
+.input-form-section {
+    background: white;
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-md);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.input-form-section h3 {
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 700;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.input-row {
+    display: grid;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    border-color: var(--color-secondary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(246, 173, 198, 0.1);
+}
+
+/* Radio buttons - clean circles */
+.radio-group {
+    display: flex;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm);
+}
+
+.radio-label {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+    font-size: 1.3rem;
+    border: 2px solid transparent;
+}
+
+.radio-label:hover {
+    background: #eeeeee;
+}
+
+.radio-label input {
+    display: none;
+}
+
+/* Selected states - clear visual feedback */
+.radio-label:has(input[value="o"]:checked),
+.radio-label.selected-o {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.radio-label:has(input[value="tri"]:checked),
+.radio-label.selected-tri {
+    background: #fff3e0;
+    color: #ef6c00;
+    border-color: #ef6c00;
+}
+
+.radio-label:has(input[value="x"]:checked),
+.radio-label.selected-x {
+    background: #ffebee;
+    color: #c62828;
+    border-color: #c62828;
+}
+
+/* Submit button - clear call to action */
+.submit-button {
+    width: 100%;
+    padding: 14px;
+    background: var(--color-secondary);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.submit-button:hover {
+    background: var(--color-secondary-dark);
+}
+
+.submit-button:active {
+    transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .event-view-container {
+        padding: var(--spacing-md);
+    }
+
+    .event-title {
+        font-size: 1.5rem;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .radio-label {
+        width: 42px;
+        height: 42px;
+        font-size: 1.1rem;
+    }
+}
